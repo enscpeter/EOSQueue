@@ -203,13 +203,6 @@ namespace WpfExample
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
-            /*
-                try
-            {
-                if (AvCoBox.SelectedIndex < 0) return;
-                MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue((string)AvCoBox.SelectedItem).IntValue);
-            }
-            catch (Exception ex) { ReportError(ex.Message, false); }*/
         }
 
         private void TvCoBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -249,12 +242,6 @@ namespace WpfExample
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
-            /*try
-            {
-                if (ISOCoBox.SelectedIndex < 0) return;
-                MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue((string)ISOCoBox.SelectedItem).IntValue);
-            }
-            catch (Exception ex) { ReportError(ex.Message, false); }*/
         }
 
         private void Queue_Click(object sender, RoutedEventArgs e)
