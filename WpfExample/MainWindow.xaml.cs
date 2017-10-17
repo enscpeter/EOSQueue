@@ -19,9 +19,22 @@ namespace WpfExample
     /// </summary>
     /// 
     public class setting {
-        string EXP = null;
-        string ISO = null;
-        string AP = null;
+
+        string EXP;
+        string ISO;
+        string AP;
+
+        public setting() {
+            EXP = null;
+            ISO = null;
+            AP = null;
+        }
+
+        public setting(string expo, string sens, string aper) {
+            EXP = expo;
+            ISO = sens;
+            AP = aper;
+        }
 
         public void setEXP(string expo) {
             EXP = expo;
@@ -75,8 +88,10 @@ namespace WpfExample
         #endregion
 
         Queue q = new Queue();
-        setting set = new setting();
         setting goset = new setting();
+        string ISOtemp = null;
+        string EXPtemp = null;
+        string APtemp = null;
 
         public MainWindow()
         {
@@ -199,7 +214,7 @@ namespace WpfExample
             try
             {
                 if (AvCoBox.SelectedIndex < 0) return;
-                set.setAP(((string)AvCoBox.SelectedItem));
+                APtemp=(((string)AvCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -210,7 +225,7 @@ namespace WpfExample
             try
             {
                 if (TvCoBox.SelectedIndex < 0) return;
-                set.setEXP(((string)TvCoBox.SelectedItem));
+                EXPtemp = (((string)ISOCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -238,7 +253,7 @@ namespace WpfExample
             try
             {
                 if (ISOCoBox.SelectedIndex < 0) return;
-                set.setISO(((string)ISOCoBox.SelectedItem));
+                ISOtemp=(((string)ISOCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -246,6 +261,7 @@ namespace WpfExample
 
         private void Queue_Click(object sender, RoutedEventArgs e)
         {
+            setting set = new setting(EXPtemp, ISOtemp, APtemp);
             q.Enqueue(set);
             
             //MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue((string)set.getAP()).IntValue); //Syntax test
@@ -267,9 +283,9 @@ namespace WpfExample
                 try
                 {
                     goset = (setting)q.Dequeue();
+                    MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue(goset.getEXP()).IntValue);
                     MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue);
                     MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue);
-                    MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue(goset.getEXP()).IntValue);
                     MainCamera.TakePhotoAsync();
                     
                 }
