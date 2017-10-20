@@ -46,7 +46,7 @@
                 <Button x:Name="FocusFar2Button" Content="&gt;&gt;" HorizontalAlignment="Left" Margin="265,10,0,0" VerticalAlignment="Top" Width="25" Click="FocusFar2Button_Click"/>
                 <Button x:Name="FocusFar1Button" Content="&gt;" HorizontalAlignment="Left" Margin="240,10,0,0" VerticalAlignment="Top" Width="20" Click="FocusFar1Button_Click"/>
                 <Canvas x:Name="LVCanvas" Margin="0,59,201,108" Background="LightGray" />
-                <TextBox x:Name="QueueList" HorizontalAlignment="Left" Height="411" Margin="429,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" />
+                <TextBox x:Name="QueueList" HorizontalAlignment="Left" Height="411" Margin="409,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196" />
             </Grid>
         </GroupBox>
     </Grid>

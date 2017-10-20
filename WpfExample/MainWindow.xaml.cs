@@ -90,6 +90,7 @@ namespace WpfExample
         Queue q = new Queue();
         //setting set = new WpfExample.setting();
         setting goset = new setting();
+        // temporary strings to store values for manual settings
         string ISOtemp = null;
         string EXPtemp = null;
         string APtemp = null;
@@ -216,7 +217,6 @@ namespace WpfExample
             {
                 if (AvCoBox.SelectedIndex < 0) return;
                 APtemp=(((string)AvCoBox.SelectedItem));
-                //set.setAP(((string)AvCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -227,28 +227,9 @@ namespace WpfExample
             try
             {
                 if (TvCoBox.SelectedIndex < 0) return;
-                EXPtemp = (((string)TvCoBox.SelectedItem));
-                //set.setEXP(((string)ISOCoBox.SelectedItem));
+                EXPtemp = (((string)TvCoBox.SelectedItem));     
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
-
-            /*try
-            {
-                if (TvCoBox.SelectedIndex < 0) return;
-
-                MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue((string)TvCoBox.SelectedItem).IntValue);
-                if ((string)TvCoBox.SelectedItem == "Bulb")
-                {
-                    BulbBox.IsEnabled = true;
-                    BulbSlider.IsEnabled = true;
-                }
-                else
-                {
-                    BulbBox.IsEnabled = false;
-                    BulbSlider.IsEnabled = false;
-                }
-            }
-            catch (Exception ex) { ReportError(ex.Message, false); }*/
         }
 
         private void ISOCoBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -257,7 +238,6 @@ namespace WpfExample
             {
                 if (ISOCoBox.SelectedIndex < 0) return;
                 ISOtemp=(((string)ISOCoBox.SelectedItem));
-                //set.setEXP(((string)ISOCoBox.SelectedItem))
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -265,18 +245,10 @@ namespace WpfExample
 
         private void Queue_Click(object sender, RoutedEventArgs e)
         {
-            setting set = new setting(EXPtemp, ISOtemp, APtemp);
-            q.Enqueue(set);
-            QueueList.Text += ((string)TvCoBox.SelectedItem) + "         " + ((string)AvCoBox.SelectedItem) + "         " + ((string)ISOCoBox.SelectedItem) + Environment.NewLine ;
-            
-            //MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue((string)set.getAP()).IntValue); //Syntax test
-
-            /*try
-            {
-                if ((string)TvCoBox.SelectedItem == "Bulb") MainCamera.TakePhotoBulbAsync(BulbTime);
-                else MainCamera.TakePhotoAsync();
-            }
-            catch (Exception ex) { ReportError(ex.Message, false); }*/
+            setting set = new setting(EXPtemp, ISOtemp, APtemp);  // create new class instance for each photo to be taken
+            q.Enqueue(set); // queue class instance
+            QueueList.Text += ((string)TvCoBox.SelectedItem) + "     " + ((string)AvCoBox.SelectedItem) + "     " + ((string)ISOCoBox.SelectedItem) + Environment.NewLine ;
+            // display queued setting in textbox
         }
         
         private async void Start_Click(object sender, RoutedEventArgs e)
@@ -285,18 +257,31 @@ namespace WpfExample
 
             while (q.Count > 0)
             {
-
+                Boolean uhoh = false; // delare and initialize flag as false
                 try
                 {
-                    goset = (setting)q.Dequeue();
-                    MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue(goset.getEXP()).IntValue);
-                    MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue);
-                    MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue);
-                    MainCamera.TakePhotoAsync();
-                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host);
+                    if (uhoh == true)
+                    {
+                        uhoh = false; // reset flag
+                    }
+                    else
+                    {
+                        goset = (setting)q.Dequeue(); //do not update goset with new value if an exposure was not taken due to failure
+                    }
+
+                    MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue(goset.getEXP()).IntValue); // set exposure
+                    MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue); // set aperture
+                    MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue); // set ISO sensitivity
+                    MainCamera.TakePhotoAsync(); // capture image
+                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host); // save to computer if possible
                 }
-                catch (Exception ex) { ReportError(ex.Message, false); }
-                await Task.Delay(30000);
+                catch (Exception ex)
+                {
+                    ReportError(ex.Message, false);
+                    uhoh = true; // set flag for image not being captured
+                    break; // stop while loop if error arises      
+                }
+                await Task.Delay(30000); //30s delay until next capture sequence
             }
            
         }
@@ -408,6 +393,7 @@ namespace WpfExample
             AvCoBox.Items.Clear();
             TvCoBox.Items.Clear();
             ISOCoBox.Items.Clear();
+            QueueList.Text = "";
             SettingsGroupBox.IsEnabled = false;
             LiveViewGroupBox.IsEnabled = false;
             SessionButton.Content = "Open Session";
