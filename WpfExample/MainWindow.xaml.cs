@@ -88,6 +88,7 @@ namespace WpfExample
         #endregion
 
         Queue q = new Queue();
+        //setting set = new WpfExample.setting();
         setting goset = new setting();
         string ISOtemp = null;
         string EXPtemp = null;
@@ -215,6 +216,7 @@ namespace WpfExample
             {
                 if (AvCoBox.SelectedIndex < 0) return;
                 APtemp=(((string)AvCoBox.SelectedItem));
+                //set.setAP(((string)AvCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -225,7 +227,8 @@ namespace WpfExample
             try
             {
                 if (TvCoBox.SelectedIndex < 0) return;
-                EXPtemp = (((string)ISOCoBox.SelectedItem));
+                EXPtemp = (((string)TvCoBox.SelectedItem));
+                //set.setEXP(((string)ISOCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -254,6 +257,7 @@ namespace WpfExample
             {
                 if (ISOCoBox.SelectedIndex < 0) return;
                 ISOtemp=(((string)ISOCoBox.SelectedItem));
+                //set.setEXP(((string)ISOCoBox.SelectedItem))
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -263,6 +267,7 @@ namespace WpfExample
         {
             setting set = new setting(EXPtemp, ISOtemp, APtemp);
             q.Enqueue(set);
+            QueueList.Text += ((string)TvCoBox.SelectedItem) + "         " + ((string)AvCoBox.SelectedItem) + "         " + ((string)ISOCoBox.SelectedItem) + Environment.NewLine ;
             
             //MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue((string)set.getAP()).IntValue); //Syntax test
 
@@ -276,6 +281,7 @@ namespace WpfExample
         
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
+            MainCamera.SetCapacity(4096, int.MaxValue);
 
             while (q.Count > 0)
             {
@@ -287,12 +293,12 @@ namespace WpfExample
                     MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue);
                     MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue);
                     MainCamera.TakePhotoAsync();
-                    
+                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host);
                 }
                 catch (Exception ex) { ReportError(ex.Message, false); }
                 await Task.Delay(30000);
             }
-
+           
         }
 
         private void BulbSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -315,20 +321,6 @@ namespace WpfExample
                     }
                     else BulbBox.Text = BulbTime.ToString();
                 }
-            }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void initsave()
-        {
-            try
-            {
-                if (IsInit)
-
-                        MainCamera.SetCapacity(4096, int.MaxValue);
-                        BrowseButton.IsEnabled = true;
-                        SavePathTextBox.IsEnabled = true;
-                      
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
@@ -456,7 +448,6 @@ namespace WpfExample
                 ISOCoBox.SelectedIndex = ISOCoBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
                 SettingsGroupBox.IsEnabled = true;
                 LiveViewGroupBox.IsEnabled = true;
-                initsave();
             }
         }
 
@@ -485,5 +476,6 @@ namespace WpfExample
         }
 
         #endregion
+
     }
 }
