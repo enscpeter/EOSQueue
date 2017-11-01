@@ -30,9 +30,7 @@
                 <Button x:Name="Start" HorizontalAlignment="Left" Margin="262,64,0,0" VerticalAlignment="Top" Width="70" Height="30" FontWeight="Bold" FontSize="16" Click="Start_Click">
                     <TextBlock TextAlignment="Center"><Run>Start</Run><LineBreak/></TextBlock>
                 </Button>
-                <Slider x:Name="BulbSlider" HorizontalAlignment="Left" Margin="162,37,0,0" VerticalAlignment="Top" Width="110" Minimum="1" Maximum="200" Value="30" LargeChange="10" TickFrequency="10" ToolTip="Bulb (in seconds)" ValueChanged="BulbSlider_ValueChanged"/>
                 <TextBox x:Name="SavePathTextBox" HorizontalAlignment="Left" Height="23" Margin="10,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="297"/>
-                <TextBox x:Name="BulbBox" HorizontalAlignment="Left" Height="23" Margin="277,37,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="30" UndoLimit="0" ToolTip="Bulb (in seconds)" TextChanged="BulbBox_TextChanged"/>
                 <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="312,125,0,0" VerticalAlignment="Top" Width="105" Click="BrowseButton_Click"/>
             </Grid>
         </GroupBox>
@@ -47,6 +45,7 @@
                 <Button x:Name="FocusFar1Button" Content="&gt;" HorizontalAlignment="Left" Margin="240,10,0,0" VerticalAlignment="Top" Width="20" Click="FocusFar1Button_Click"/>
                 <Canvas x:Name="LVCanvas" Margin="0,59,201,108" Background="LightGray" />
                 <TextBox x:Name="QueueList" HorizontalAlignment="Left" Height="411" Margin="409,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196" />
+                <Button x:Name="button" Content="Import" HorizontalAlignment="Left" Margin="10,405,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.987,-0.227" IsEnabled="False" Click="button_Click"/>
             </Grid>
         </GroupBox>
     </Grid>

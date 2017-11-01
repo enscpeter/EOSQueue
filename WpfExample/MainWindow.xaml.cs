@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using EOSDigital.API;
 using EOSDigital.SDK;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace WpfExample
 {
@@ -65,7 +66,6 @@ namespace WpfExample
 
     }
 
-
     public partial class MainWindow : Window
     {
         #region Variables
@@ -77,23 +77,24 @@ namespace WpfExample
         CameraValue[] ISOList;
         List<Camera> CamList;
         bool IsInit = false;
-        int BulbTime = 30;
         ImageBrush bgbrush = new ImageBrush();
         Action<BitmapImage> SetImageAction;
         System.Windows.Forms.FolderBrowserDialog SaveFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
-
         int ErrCount;
         object ErrLock = new object();
 
         #endregion
 
+        #region Queue
         Queue q = new Queue();
-        //setting set = new WpfExample.setting();
         setting goset = new setting();
         // temporary strings to store values for manual settings
         string ISOtemp = null;
         string EXPtemp = null;
         string APtemp = null;
+        //TextReader textread = new StreamReader(@"script.txt");
+        //string queueText = textread.ReadLine();
+        #endregion
 
         public MainWindow()
         {
@@ -109,7 +110,6 @@ namespace WpfExample
                 SaveFolderBrowser.Description = "Save Images To...";
                 RefreshCamera();
                 IsInit = true;
-
             }
             catch (DllNotFoundException) { ReportError("Canon DLLs not found!", true); }
             catch (Exception ex) { ReportError(ex.Message, true); }
@@ -216,7 +216,7 @@ namespace WpfExample
             try
             {
                 if (AvCoBox.SelectedIndex < 0) return;
-                APtemp=(((string)AvCoBox.SelectedItem));
+                APtemp = (((string)AvCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -227,7 +227,7 @@ namespace WpfExample
             try
             {
                 if (TvCoBox.SelectedIndex < 0) return;
-                EXPtemp = (((string)TvCoBox.SelectedItem));     
+                EXPtemp = (((string)TvCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
@@ -237,7 +237,7 @@ namespace WpfExample
             try
             {
                 if (ISOCoBox.SelectedIndex < 0) return;
-                ISOtemp=(((string)ISOCoBox.SelectedItem));
+                ISOtemp = (((string)ISOCoBox.SelectedItem));
             }
             catch (Exception ex) { ReportError(ex.Message, false); }
 
@@ -247,67 +247,38 @@ namespace WpfExample
         {
             setting set = new setting(EXPtemp, ISOtemp, APtemp);  // create new class instance for each photo to be taken
             q.Enqueue(set); // queue class instance
-            QueueList.Text += ((string)TvCoBox.SelectedItem) + "     " + ((string)AvCoBox.SelectedItem) + "     " + ((string)ISOCoBox.SelectedItem) + Environment.NewLine ;
+            QueueList.Text += ((string)TvCoBox.SelectedItem) + "     " + ((string)AvCoBox.SelectedItem) + "     " + ((string)ISOCoBox.SelectedItem) + Environment.NewLine;
             // display queued setting in textbox
         }
-        
+
+        public async Task WaitAsynchronously() {
+            await Task.Delay(30000); //30s delay until next capture sequence
+        }
+
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
-            MainCamera.SetCapacity(4096, int.MaxValue);
-
+            //MainCamera.SetCapacity(4096, int.MaxValue);
+    
             while (q.Count > 0)
             {
-                Boolean uhoh = false; // delare and initialize flag as false
                 try
                 {
-                    if (uhoh == true)
-                    {
-                        uhoh = false; // reset flag
-                    }
-                    else
-                    {
-                        goset = (setting)q.Dequeue(); //do not update goset with new value if an exposure was not taken due to failure
-                    }
-
+                    goset = (setting)q.Dequeue(); //do not update goset with new value if an exposure was not taken due to failure
                     MainCamera.SetSetting(PropertyID.Tv, TvValues.GetValue(goset.getEXP()).IntValue); // set exposure
                     MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue); // set aperture
                     MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue); // set ISO sensitivity
                     MainCamera.TakePhotoAsync(); // capture image
-                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host); // save to computer if possible
                 }
                 catch (Exception ex)
                 {
                     ReportError(ex.Message, false);
-                    uhoh = true; // set flag for image not being captured
-                    break; // stop while loop if error arises      
+                    break; // stop while loop if error arises     
                 }
-                await Task.Delay(30000); //30s delay until next capture sequence
-            }
-           
-        }
-
-        private void BulbSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            try { if (IsInit) BulbBox.Text = BulbSlider.Value.ToString(); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void BulbBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                if (IsInit)
+                finally
                 {
-                    int b;
-                    if (int.TryParse(BulbBox.Text, out b) && b != BulbTime)
-                    {
-                        BulbTime = b;
-                        BulbSlider.Value = BulbTime;
-                    }
-                    else BulbBox.Text = BulbTime.ToString();
+                    await WaitAsynchronously();
                 }
             }
-            catch (Exception ex) { ReportError(ex.Message, false); }
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -399,6 +370,8 @@ namespace WpfExample
             SessionButton.Content = "Open Session";
             SessionLabel.Content = "No open session";
             StarLVButton.Content = "Start LV";
+            button.IsEnabled = false;
+            BrowseButton.IsEnabled = false;
         }
 
         private void RefreshCamera()
@@ -412,6 +385,7 @@ namespace WpfExample
 
         private void OpenSession()
         {
+
             if (CameraListBox.SelectedIndex >= 0)
             {
                 MainCamera = CamList[CameraListBox.SelectedIndex];
@@ -420,6 +394,12 @@ namespace WpfExample
                 MainCamera.ProgressChanged += MainCamera_ProgressChanged;
                 MainCamera.StateChanged += MainCamera_StateChanged;
                 MainCamera.DownloadReady += MainCamera_DownloadReady;
+
+                if (IsInit)
+                {
+                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host); //new
+                    MainCamera.SetCapacity(); //new
+                }
 
                 SessionButton.Content = "Close Session";
                 SessionLabel.Content = MainCamera.DeviceName;
@@ -434,6 +414,9 @@ namespace WpfExample
                 ISOCoBox.SelectedIndex = ISOCoBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
                 SettingsGroupBox.IsEnabled = true;
                 LiveViewGroupBox.IsEnabled = true;
+                BrowseButton.IsEnabled = true;
+                button.IsEnabled = true; //new
+                //SaveFolderBrowser.SelectedPath = SavePathTextBox.Text; //new
             }
         }
 
@@ -463,5 +446,51 @@ namespace WpfExample
 
         #endregion
 
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            int count = 0;
+            //try{
+                Assembly curr_assembly = Assembly.GetExecutingAssembly();
+                StreamReader readtxt = new StreamReader(curr_assembly.GetManifestResourceStream("WpfExample.script.txt"));
+                while (readtxt.Peek() >= 0)
+                {
+                    string[] TempParam = readtxt.ReadLine().Split(' ');
+                    foreach (string param in TempParam)
+                    {
+                        if (count == 0)
+                        {
+                            EXPtemp = param;
+                            if (EXPtemp == "20\"" || EXPtemp == "10\"" || EXPtemp == "6\"" || EXPtemp == "0\"3" || EXPtemp == "1/6" || EXPtemp == "1/10" || EXPtemp == "1/20")
+                        {
+                            EXPtemp += " (1/3)";
+                        }
+                            count++;
+                        }
+                        else if (count == 1)
+                        {
+                            APtemp = param;
+                            if (APtemp == "3.5" || APtemp == "13")
+                        {
+                            APtemp += " (1/3)";
+                        }
+                            count++;
+                        }
+                        else if (count == 2)
+                        {
+                            ISOtemp = "ISO " + param;
+                            count = 0;
+                            setting setf = new setting(EXPtemp, ISOtemp, APtemp);  // create new class instance for each photo to be taken
+                            q.Enqueue(setf); // queue class instance
+                            QueueList.Text += EXPtemp + "     " + APtemp + "     " + ISOtemp + Environment.NewLine;
+                        }
+                        
+                    }
+                }
+            /*}
+            catch
+            {
+
+            }*/
+        }
     }
 }

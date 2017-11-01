@@ -728,12 +728,12 @@ namespace EOSDigital.API
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
         /// <exception cref="SDKException">An SDK call failed</exception>
-        public void SetCapacity(int bytesPerSector, int numberOfFreeClusters)
+        public void SetCapacity()
         {
             CheckState();
             MainThread.Invoke(() =>
             {
-                Capacity capacity = new Capacity(numberOfFreeClusters, bytesPerSector, true);
+                Capacity capacity = new Capacity(0x7FFFFFFF, 0x1000, true);
                 ErrorHandler.CheckError(this, CanonSDK.EdsSetCapacity(CamRef, capacity));
             });
         }
@@ -1476,7 +1476,7 @@ namespace EOSDigital.API
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
         protected void CheckState(bool checkSession = true)
         {
-            if (IsDisposed) throw new ObjectDisposedException(nameof(Camera) + ID);
+            //if (IsDisposed) throw new ObjectDisposedException(nameof(Camera) + ID);
             if (checkSession && !SessionOpen) throw new CameraSessionException("Session is closed");
             if (!CanonAPI.IsSDKInitialized) throw new SDKStateException("Canon SDK is not initialized");
         }
