@@ -257,8 +257,10 @@ namespace WpfExample
 
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
-            //MainCamera.SetCapacity(4096, int.MaxValue);
-    
+            int totalimg = q.Count;
+            OverallProg.Maximum = totalimg;
+            OverallProg.Minimum = 0;
+
             while (q.Count > 0)
             {
                 try
@@ -268,6 +270,7 @@ namespace WpfExample
                     MainCamera.SetSetting(PropertyID.Av, AvValues.GetValue(goset.getAP()).IntValue); // set aperture
                     MainCamera.SetSetting(PropertyID.ISO, ISOValues.GetValue(goset.getISO()).IntValue); // set ISO sensitivity
                     MainCamera.TakePhotoAsync(); // capture image
+                    statustext.Text = "Capturing image " + (totalimg - q.Count) + " of " + totalimg;
                 }
                 catch (Exception ex)
                 {
@@ -276,9 +279,11 @@ namespace WpfExample
                 }
                 finally
                 {
+                    OverallProg.Value = totalimg - q.Count;
                     await WaitAsynchronously();
                 }
             }
+            statustext.Text = "Complete";
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -318,43 +323,7 @@ namespace WpfExample
             catch (Exception ex) { ReportError(ex.Message, false); }
         }
 
-        private void FocusNear3Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Near3); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void FocusNear2Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Near2); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void FocusNear1Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Near1); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void FocusFar1Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far1); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void FocusFar2Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far2); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        private void FocusFar3Button_Click(object sender, RoutedEventArgs e)
-        {
-            try { MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far3); }
-            catch (Exception ex) { ReportError(ex.Message, false); }
-        }
-
-        #endregion
+        #endregion`
 
         #region Subroutines
 
@@ -372,6 +341,7 @@ namespace WpfExample
             StarLVButton.Content = "Start LV";
             button.IsEnabled = false;
             BrowseButton.IsEnabled = false;
+            q.Clear();
         }
 
         private void RefreshCamera()
@@ -385,7 +355,6 @@ namespace WpfExample
 
         private void OpenSession()
         {
-
             if (CameraListBox.SelectedIndex >= 0)
             {
                 MainCamera = CamList[CameraListBox.SelectedIndex];
@@ -397,8 +366,14 @@ namespace WpfExample
 
                 if (IsInit)
                 {
-                    MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host); //new
-                    MainCamera.SetCapacity(); //new
+                    try
+                    {
+                        MainCamera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Host); //new
+                        MainCamera.SetCapacity(); //new
+                        BrowseButton.IsEnabled = true;
+                        button.IsEnabled = true; //new
+                    }
+                    catch (Exception ex) { ReportError(ex.Message, false); }
                 }
 
                 SessionButton.Content = "Close Session";
@@ -414,8 +389,6 @@ namespace WpfExample
                 ISOCoBox.SelectedIndex = ISOCoBox.Items.IndexOf(ISOValues.GetValue(MainCamera.GetInt32Setting(PropertyID.ISO)).StringValue);
                 SettingsGroupBox.IsEnabled = true;
                 LiveViewGroupBox.IsEnabled = true;
-                BrowseButton.IsEnabled = true;
-                button.IsEnabled = true; //new
                 //SaveFolderBrowser.SelectedPath = SavePathTextBox.Text; //new
             }
         }
@@ -449,48 +422,48 @@ namespace WpfExample
         private void button_Click(object sender, RoutedEventArgs e)
         {
             int count = 0;
-            //try{
+            try
+            {
                 Assembly curr_assembly = Assembly.GetExecutingAssembly();
-                StreamReader readtxt = new StreamReader(curr_assembly.GetManifestResourceStream("WpfExample.script.txt"));
-                while (readtxt.Peek() >= 0)
+                StreamReader readtxt = new StreamReader(curr_assembly.GetManifestResourceStream("WpfExample.script.txt")); //access emebed resource text file
+                while (readtxt.Peek() >= 0) // read line by line until none are left
                 {
-                    string[] TempParam = readtxt.ReadLine().Split(' ');
-                    foreach (string param in TempParam)
+                    string[] TempParam = readtxt.ReadLine().Split(' '); // parse strings using space as a delimiter 
+                    foreach (string param in TempParam) // iterate through each element of parsed string array
                     {
                         if (count == 0)
                         {
-                            EXPtemp = param;
+                            EXPtemp = param; // store first element of line as temporary exposure
                             if (EXPtemp == "20\"" || EXPtemp == "10\"" || EXPtemp == "6\"" || EXPtemp == "0\"3" || EXPtemp == "1/6" || EXPtemp == "1/10" || EXPtemp == "1/20")
-                        {
-                            EXPtemp += " (1/3)";
-                        }
-                            count++;
+                            {
+                                EXPtemp += " (1/3)"; // append (1/3) to the expsoures that require it
+                            }
+                            count++; // increment count to access next value (aperture)
                         }
                         else if (count == 1)
                         {
-                            APtemp = param;
+                            APtemp = param; // store second element of line as temporary aperture size
                             if (APtemp == "3.5" || APtemp == "13")
-                        {
-                            APtemp += " (1/3)";
-                        }
-                            count++;
+                            {
+                                APtemp += " (1/3)"; // append (1/3) to the fstops that require it
+                            }
+                            count++; // increment count to access next value (ISO)
                         }
                         else if (count == 2)
                         {
-                            ISOtemp = "ISO " + param;
-                            count = 0;
+                            ISOtemp = "ISO " + param; // store last element of line as a temporary ISO
+                            count = 0; // reset count to 0 so that the first element of the NEXT line will be accessed
                             setting setf = new setting(EXPtemp, ISOtemp, APtemp);  // create new class instance for each photo to be taken
                             q.Enqueue(setf); // queue class instance
-                            QueueList.Text += EXPtemp + "     " + APtemp + "     " + ISOtemp + Environment.NewLine;
+                            QueueList.Text += EXPtemp + "     " + APtemp + "     " + ISOtemp + Environment.NewLine; // display queue in textbox
                         }
-                        
                     }
                 }
-            /*}
+            }
             catch
             {
-
-            }*/
+                //placeholder until I find out what I should do
+            }
         }
     }
 }
