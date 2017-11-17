@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="WpfExample.exe" version="1.0.0.0" publicKeyToken="a47a4b9206ee2493" language="neutral" processorArchitecture="x86" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="WpfExample" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+    <commandLine file="WpfExample.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EDSDKLib.dll" size="107008">
+      <assemblyIdentity name="EDSDKLib" version="1.1.1.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>aDrLaVp/TgOcQo5Pc7a6ujuM8EepCcHgQiZ8TOSOmuc=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WpfExample.exe" size="27544">
+      <assemblyIdentity name="WpfExample" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>XFv67t6c1tu22eEqG0r/omqT3R2e57QMXvTh/j5GKlA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="WpfExample.exe.config" size="161">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>+K0Xw31ERSGzkFzL116my249J2OxbrVrLhqkJ0Fz5hQ=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=ADSFU\ple" issuerKeyHash="2a202db2d771717f907359f439a4835073723d4a" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>dQWPPMM2TBRKGGfuV+jr1EnPomH1WRB3K0tvZheN4KA=</DigestValue></Reference></SignedInfo><SignatureValue>SrxR2p37a5co4inr7uUiHvyca4iVg9QPSLlQiWPvWA1n3EBlO5/KVaQF1li/aOQWErFL7Zgt2P5xBkNegYiyG6Ax1lnZpn8OGTl4CsyKFB4gH84uH2JmHfCvFzqIAZC9kJOaLnCWmKSyB1nlrW06YyHLUYLq+tpVe1NrC4fnFUE=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>pxTFTJM4FVs8+SVT+cu/wTBZA+2U1y0LGb6VomATW027y275Jojbo2VSKDhMRMS0FkYXEsgHqw7RXDywpz0DLI72i/pEuQWjIF7xohOBVtnV8xXzRMyN0FBiMMCFaxCM7asT7Avn8k+X8YdB0fOWCBlGdgeepulLT0zwD9f4H3c=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="a0e08d17666f4b2b771059f561a2cf49d4ebe857ee67184a144c36c33c8f0575" Description="" Url=""><as:assemblyIdentity name="WpfExample.exe" version="1.0.0.0" publicKeyToken="a47a4b9206ee2493" language="neutral" processorArchitecture="x86" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=ADSFU\ple</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>J9NhZWnLpcF+Amq4pOO6KjMJm2VzR/71M+adW73bCy4=</DigestValue></Reference></SignedInfo><SignatureValue>jGrzNujgbqpqHocNdPGV457dHfcQDuePXfxfwiWzhPG/8/0OU0849T47gCu4W20OBBn09KhDbnscJhvJLRoKP76E2UbJ0lYOWWJdUiTLbaOWXvV975v0E0kUdNBu0CsbqSiQ1e6Mzro7nXsU43u/R+i5T2+b4/sBMy0YAtv4NRY=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>pxTFTJM4FVs8+SVT+cu/wTBZA+2U1y0LGb6VomATW027y275Jojbo2VSKDhMRMS0FkYXEsgHqw7RXDywpz0DLI72i/pEuQWjIF7xohOBVtnV8xXzRMyN0FBiMMCFaxCM7asT7Avn8k+X8YdB0fOWCBlGdgeepulLT0zwD9f4H3c=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBvTCCASagAwIBAgIQKnCH9UqwILRDBuyH5sZF2zANBgkqhkiG9w0BAQsFADAdMRswGQYDVQQDHhIAQQBEAFMARgBVAFwAcABsAGUwHhcNMTcxMTE0MjExMzE3WhcNMTgxMTE1MDMxMzE3WjAdMRswGQYDVQQDHhIAQQBEAFMARgBVAFwAcABsAGUwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAKcUxUyTOBVbPPklU/nLv8EwWQPtlNctCxm+laJgE1tNu8tu+SaI26NlUig4TETEtBZGFxLIB6sO0Vw8sKc9AyyO9ov6RLkFoyBe8aITgVbZ1fMV80TMjdBQYjDAhWsQjO2rE+wL5/JPl/GHQdHzlggZRnYHnqbpS09M8A/X+B93AgMBAAEwDQYJKoZIhvcNAQELBQADgYEAbYGmlHtmaTcPrc38fXcfw++H/sL0k8zhcAJ7o0iDhyKLpHm2sqrCAyfrqcWAIMVGBN16Wnvefxv7ioCkcU8tdfKJRB+yrc/Bi8w5WzQKxI+4fDO1rwG0YGHB6r+H7DfRO8Mx1hc0ZUVPqPrZQaY10GrR76CqyfBjj7y3/Axtzzc=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

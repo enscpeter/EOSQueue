@@ -4,47 +4,74 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfExample"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="Canon Capture Queue" Height="694" Width="645" MinWidth="645" MinHeight="694" Closing="Window_Closing">
+        Title="Canon Capture Queue" Height="670" Width="646.5" MinWidth="646.5" MinHeight="670" Closing="Window_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+
+                <!-- accent resource -->
+                <!-- change "Cobalt" to the accent color you want -->
+
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Steel.xaml" />
+
+                <!-- theme resource -->
+                <!-- change "BaseLight" to the theme you want -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.Background>
             <ImageBrush/>
         </Grid.Background>
-        <GroupBox x:Name="InitGroupBox" Header="Init" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="180" Width="171">
+        <GroupBox x:Name="InitGroupBox" Header="Initialization" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="180" Width="171" BorderThickness="0">
             <Grid>
-                <Label x:Name="SessionLabel" Content="No open session" Margin="10,2,10,0" VerticalAlignment="Top"/>
-                <ListBox x:Name="CameraListBox" Height="84" Margin="10,33,10,0" VerticalAlignment="Top"/>
-                <Button x:Name="SessionButton" Content="Open Session" HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top" Width="91" Height="26" Click="OpenSessionButton_Click"/>
-                <Button x:Name="RefreshButton" Content="↻" HorizontalAlignment="Left" Margin="114,122,0,0" VerticalAlignment="Top" Width="35" FontSize="16" Height="26" Click="RefreshButton_Click"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65*"/>
+                    <ColumnDefinition Width="16*"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="SessionLabel" Content="No open session" Margin="10,2,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <ListBox x:Name="CameraListBox" Height="72" Margin="10,33,10,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <Button x:Name="SessionButton" Content="Open Session" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Width="91" Height="34" Click="OpenSessionButton_Click" Style="{DynamicResource SquareButtonStyle}"/>
+                <Button x:Name="RefreshButton" Content="↻" HorizontalAlignment="Left" Margin="116,110,0,0" Width="35" FontSize="16" Height="34" Click="RefreshButton_Click" Grid.ColumnSpan="2" VerticalAlignment="Center" Style="{DynamicResource SquareButtonStyle}"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="SettingsGroupBox" Header="Settings" HorizontalAlignment="Left" Margin="186,10,0,0" VerticalAlignment="Top" Height="180" Width="439" Grid.ColumnSpan="2" IsEnabled="False">
-            <Grid>
-                <ComboBox x:Name="AvCoBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="AvCoBox_SelectionChanged"/>
-                <ComboBox x:Name="TvCoBox" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TvCoBox_SelectionChanged"/>
-                <ComboBox x:Name="ISOCoBox" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="ISOCoBox_SelectionChanged"/>
-                <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="22" Margin="10,91,0,0" VerticalAlignment="Top" Width="137"/>
-                <Label Content="Av" HorizontalAlignment="Left" Margin="118,7,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
-                <Label Content="Tv" HorizontalAlignment="Left" Margin="118,33,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
-                <Label Content="ISO" HorizontalAlignment="Left" Margin="118,60,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
-                <Button x:Name="Queue" HorizontalAlignment="Left" Margin="162,64,0,0" VerticalAlignment="Top" Width="70" Height="30" FontWeight="Bold" FontSize="16" Click="Queue_Click">
-                    <TextBlock TextAlignment="Center"><Run>Queue</Run><LineBreak/></TextBlock>
+        <GroupBox x:Name="SettingsGroupBox" Header="Settings" HorizontalAlignment="Left" Margin="186,10,0,0" VerticalAlignment="Top" Height="180" Width="439" Grid.ColumnSpan="2" IsEnabled="False" BorderThickness="0">
+            <Grid Margin="0,0,-2,0">
+                <ComboBox x:Name="AvCoBox" HorizontalAlignment="Left" Margin="32,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="AvCoBox_SelectionChanged" Background="#FFF4F4F4"/>
+                <ComboBox x:Name="TvCoBox" HorizontalAlignment="Left" Margin="164,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="TvCoBox_SelectionChanged"/>
+                <ComboBox x:Name="ISOCoBox" HorizontalAlignment="Left" Margin="296,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="ISOCoBox_SelectionChanged" RenderTransformOrigin="0.253,0.636"/>
+                <ProgressBar x:Name="MainProgressBar" HorizontalAlignment="Left" Height="17" Margin="10,135,0,0" VerticalAlignment="Top" Width="409"/>
+                <Label Content="Av" HorizontalAlignment="Left" Margin="62,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Label Content="Tv" HorizontalAlignment="Left" Margin="203,33,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Label Content="ISO" HorizontalAlignment="Left" Margin="338,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.447,0.538"/>
+                <Button x:Name="Queue" HorizontalAlignment="Left" Margin="114,64,0,0" VerticalAlignment="Top" Width="70" Height="30" FontWeight="Bold" FontSize="16" Click="Queue_Click" Style="{DynamicResource SquareButtonStyle}">
+                    <TextBlock TextAlignment="Center" FontWeight="Normal" FontSize="14" VerticalAlignment="Center" Height="20"><Run>Queue</Run><LineBreak/></TextBlock>
                 </Button>
-                <Button x:Name="Start" HorizontalAlignment="Left" Margin="262,64,0,0" VerticalAlignment="Top" Width="70" Height="30" FontWeight="Bold" FontSize="16" Click="Start_Click">
-                    <TextBlock TextAlignment="Center"><Run>Start</Run><LineBreak/></TextBlock>
+                <Button x:Name="Start" HorizontalAlignment="Left" Margin="245,64,0,0" VerticalAlignment="Top" Width="70" Height="30" FontWeight="Bold" FontSize="14" Click="Start_Click" Style="{StaticResource AccentedSquareButtonStyle}">
+                    <TextBlock TextAlignment="Center" FontWeight="Normal" VerticalAlignment="Center" Height="20"><Run>Start</Run><LineBreak/></TextBlock>
                 </Button>
-                <TextBox x:Name="SavePathTextBox" HorizontalAlignment="Left" Height="23" Margin="10,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="297"/>
-                <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="312,125,0,0" VerticalAlignment="Top" Width="105" Click="BrowseButton_Click"/>
+                <TextBox x:Name="SavePathTextBox" HorizontalAlignment="Left" Height="23" Margin="10,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="349"/>
+                <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="364,104,0,0" VerticalAlignment="Top" Width="55" Click="BrowseButton_Click" Style="{DynamicResource SquareButtonStyle}"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="LiveViewGroupBox" Header="Live View" Margin="10,195,10,10" Grid.ColumnSpan="2" IsEnabled="False">
-            <Grid>
-                <Button x:Name="StarLVButton" Content="Start LV" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="StarLVButton_Click"/>
-                <Canvas x:Name="LVCanvas" Margin="0,59,201,108" Background="LightGray" />
-                <TextBox x:Name="QueueList" HorizontalAlignment="Left" Height="372" Margin="409,16,0,0" VerticalAlignment="Top" Width="196" />
-                <Button x:Name="button" Content="Import" HorizontalAlignment="Left" Margin="10,348,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.987,-0.227" IsEnabled="False" Click="button_Click"/>
-                <ProgressBar x:Name="OverallProg" HorizontalAlignment="Left" Height="20" Margin="0,417,0,0" VerticalAlignment="Top" Width="605"/>
-                <TextBlock x:Name="statustext" HorizontalAlignment="Left" Margin="10,393,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.1,2.406" Height="19" Width="585"/>
+        <GroupBox x:Name="LiveViewGroupBox" Header="Monitor" Margin="8,195,12,10" IsEnabled="False" BorderThickness="0">
+            <Grid Margin="0,0,-12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="29*"/>
+                    <ColumnDefinition Width="92*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="StarLVButton" Content="Start LV" HorizontalAlignment="Left" Margin="0,18,0,0" VerticalAlignment="Top" Width="75" Click="StarLVButton_Click" Style="{DynamicResource SquareButtonStyle}"/>
+                <Canvas x:Name="LVCanvas" Margin="0,50,236,96" Background="LightGray" Grid.ColumnSpan="2" />
+                <TextBox x:Name="QueueList" HorizontalAlignment="Left" Height="244" Margin="239,50,0,0" VerticalAlignment="Top" Width="212" Grid.Column="1" />
+                <Button x:Name="button" Content="Import" HorizontalAlignment="Left" Margin="239,18,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="-0.987,-0.227" IsEnabled="False" Click="button_Click" Grid.Column="1" Style="{DynamicResource SquareButtonStyle}"/>
+                <ProgressBar x:Name="OverallProg" HorizontalAlignment="Left" Height="20" Margin="0,375,0,0" VerticalAlignment="Top" Width="599" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="statustext" HorizontalAlignment="Left" Margin="0,351,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.1,2.406" Height="19" Width="585" Grid.ColumnSpan="2"/>
             </Grid>
         </GroupBox>
     </Grid>
