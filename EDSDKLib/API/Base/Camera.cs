@@ -5,6 +5,7 @@ using EOSDigital.SDK;
 using FileAccess = EOSDigital.SDK.FileAccess;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EOSDigital.API
 {
@@ -453,6 +454,7 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
+        /// 
         public void TakePhotoAsync()
         {
             CheckState();

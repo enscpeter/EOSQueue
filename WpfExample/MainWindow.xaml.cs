@@ -12,6 +12,7 @@ using EOSDigital.API;
 using EOSDigital.SDK;
 using System.Threading.Tasks;
 using System.Reflection;
+using MahApps.Metro.Controls;
 
 namespace WpfExample
 {
@@ -66,7 +67,7 @@ namespace WpfExample
 
     }
 
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         #region Variables
 
@@ -252,8 +253,9 @@ namespace WpfExample
         }
 
         public async Task WaitAsynchronously() {
-            await Task.Delay(30000); //30s delay until next capture sequence
+            await Task.Delay(60000); //60s delay until next capture sequence
         }
+
 
         private async void Start_Click(object sender, RoutedEventArgs e)
         {
@@ -281,6 +283,7 @@ namespace WpfExample
                 {
                     OverallProg.Value = totalimg - q.Count;
                     await WaitAsynchronously();
+
                 }
             }
             statustext.Text = "Complete";
@@ -422,10 +425,16 @@ namespace WpfExample
         private void button_Click(object sender, RoutedEventArgs e)
         {
             int count = 0;
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "Text Files (*.txt)|*.txt" };
+            var result = ofd.ShowDialog();
+            if (result == false) return;
+            //ofd.FileName;
+
             try
             {
                 Assembly curr_assembly = Assembly.GetExecutingAssembly();
-                StreamReader readtxt = new StreamReader(curr_assembly.GetManifestResourceStream("WpfExample.script.txt")); //access emebed resource text file
+
+                StreamReader readtxt = new StreamReader(ofd.FileName); //access emebed resource text file
                 while (readtxt.Peek() >= 0) // read line by line until none are left
                 {
                     string[] TempParam = readtxt.ReadLine().Split(' '); // parse strings using space as a delimiter 
